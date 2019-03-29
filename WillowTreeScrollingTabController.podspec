@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "WillowTreeScrollingTabController"
-  s.version      = "0.1.0"
+  s.version      = "0.2.0"
   s.summary      = "Swift based tabbed view controller with support for unlimited tabs."
 
   s.description  = <<-DESC

@@ -224,7 +224,7 @@ open class ScrollingTabController: UIViewController, UIScrollViewDelegate, UICol
     func setLargestTabSize() {
         largestTabSize = viewControllers.reduce(CGSize.zero) { (largestSize: CGSize, viewController: UIViewController) -> CGSize in
             ScrollingTabController.sizingCell.title = viewController.tabBarItem.title
-            let size = ScrollingTabController.sizingCell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+            let size = ScrollingTabController.sizingCell.contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
             return size.width > largestSize.width ? size : largestSize
         }
         
@@ -243,9 +243,9 @@ open class ScrollingTabController: UIViewController, UIScrollViewDelegate, UICol
     func configureViewControllers() {
         for item in items {
             let child = item.controller
-            child.willMove(toParentViewController: nil)
+            child.willMove(toParent: nil)
             child.view.removeFromSuperview()
-            child.removeFromParentViewController()
+            child.removeFromParent()
             item.container.removeFromSuperview()
         }
         
@@ -313,10 +313,10 @@ open class ScrollingTabController: UIViewController, UIScrollViewDelegate, UICol
         let top = NSLayoutConstraint(item: child.view, attribute: .top, relatedBy: .equal, toItem: container, attribute: .top, multiplier: 1.0, constant: 0.0)
         let left = NSLayoutConstraint(item: child.view, attribute: .left, relatedBy: .equal, toItem: container, attribute: .left, multiplier: 1.0, constant: 0.0)
 
-        addChildViewController(child)
+        addChild(child)
         container.addSubview(child.view)
         NSLayoutConstraint.activate([width, height, top, left])
-        child.didMove(toParentViewController: self)
+        child.didMove(toParent: self)
     }
     
     func unloadTab(_ index: Int) {
@@ -333,9 +333,9 @@ open class ScrollingTabController: UIViewController, UIScrollViewDelegate, UICol
         }
         
         let child = items[index].controller
-        child.willMove(toParentViewController: nil)
+        child.willMove(toParent: nil)
         child.view.removeFromSuperview()
-        child.removeFromParentViewController()
+        child.removeFromParent()
     }
     
     func unloadTabs() {
@@ -345,7 +345,7 @@ open class ScrollingTabController: UIViewController, UIScrollViewDelegate, UICol
     func reloadData() {
         tabView.collectionView.reloadData()
         if items.count > 0 {
-            tabView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: UICollectionViewScrollPosition())
+            tabView.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: UICollectionView.ScrollPosition())
         }
     }
     
@@ -390,7 +390,7 @@ open class ScrollingTabController: UIViewController, UIScrollViewDelegate, UICol
             
         case .sizeToContent:
             ScrollingTabController.sizingCell.title = viewControllers[indexPath.row].tabBarItem.title
-            size = ScrollingTabController.sizingCell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+            size = ScrollingTabController.sizingCell.contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         }
 
         return size

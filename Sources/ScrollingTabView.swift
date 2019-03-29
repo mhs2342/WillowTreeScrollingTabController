@@ -158,8 +158,8 @@ open class ScrollingTabView: UIView {
         collectionView.backgroundColor = UIColor.clear
         addSubview(collectionView)
         
-        let horizontalContstraints = NSLayoutConstraint.constraints(withVisualFormat: "|[collectionView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["collectionView": collectionView])
-        let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|[collectionView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["collectionView": collectionView])
+        let horizontalContstraints = NSLayoutConstraint.constraints(withVisualFormat: "|[collectionView]|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: ["collectionView": collectionView])
+        let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|[collectionView]|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: ["collectionView": collectionView])
         
         NSLayoutConstraint.activate(horizontalContstraints)
         NSLayoutConstraint.activate(verticalConstraints)
@@ -168,15 +168,47 @@ open class ScrollingTabView: UIView {
         selectionIndicator.translatesAutoresizingMaskIntoConstraints = false
         selectionIndicator.backgroundColor = selectionIndicator.tintColor
         collectionView.addSubview(selectionIndicator)
-        selectionIndicatorBottomConstraint = NSLayoutConstraint(item: selectionIndicator, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.bottom, multiplier: 1, constant: selectionIndicatorOffset)
-        selectionIndicatorLeadingConstraint = NSLayoutConstraint(item: selectionIndicator, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: collectionView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 0)
-        selectionIndicatorHeightConstraint = NSLayoutConstraint(item: selectionIndicator, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: selectionIndicatorHeight)
-        selectionIndicatorWidthConstraint = NSLayoutConstraint(item: selectionIndicator, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 100)
+        selectionIndicatorBottomConstraint = NSLayoutConstraint(item: selectionIndicator,
+                                                                attribute:.bottom,
+                                                                relatedBy: .equal,
+                                                                toItem: self,
+                                                                attribute: .bottom,
+                                                                multiplier: 1,
+                                                                constant: selectionIndicatorOffset)
 
-        NSLayoutConstraint.activate([selectionIndicatorBottomConstraint, selectionIndicatorLeadingConstraint, selectionIndicatorHeightConstraint, selectionIndicatorWidthConstraint])
+        selectionIndicatorLeadingConstraint = NSLayoutConstraint(item: selectionIndicator,
+                                                                 attribute: .leading,
+                                                                 relatedBy: .equal,
+                                                                 toItem: collectionView,
+                                                                 attribute: .leading,
+                                                                 multiplier: 1, constant: 0)
+
+        selectionIndicatorHeightConstraint = NSLayoutConstraint(item: selectionIndicator,
+                                                                attribute: .height,
+                                                                relatedBy: .equal,
+                                                                toItem: nil,
+                                                                attribute: .notAnAttribute,
+                                                                multiplier: 1.0,
+                                                                constant: selectionIndicatorHeight)
+
+        selectionIndicatorWidthConstraint = NSLayoutConstraint(item: selectionIndicator,
+                                                               attribute: .width,
+                                                               relatedBy: .equal,
+                                                               toItem: nil,
+                                                               attribute: .notAnAttribute,
+                                                               multiplier: 1.0,
+                                                               constant: 100)
+
+        NSLayoutConstraint.activate([
+            selectionIndicatorBottomConstraint,
+            selectionIndicatorLeadingConstraint,
+            selectionIndicatorHeightConstraint,
+            selectionIndicatorWidthConstraint
+            ])
         
         collectionView.register(classForCell, forCellWithReuseIdentifier: ScrollingTabTitleCell)
-        collectionView.collectionViewLayout.register(classForDivider, forDecorationViewOfKind: ScrollingTabVerticalDividerType)
+        collectionView.collectionViewLayout.register(classForDivider,
+                                                     forDecorationViewOfKind: ScrollingTabVerticalDividerType)
         
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
@@ -184,7 +216,7 @@ open class ScrollingTabView: UIView {
     
     open override func layoutSubviews() {
         super.layoutSubviews()
-        bringSubview(toFront: selectionIndicator)
+        bringSubviewToFront(selectionIndicator)
         
         switch tabSizing {
         case .fitViewFrameWidth:
@@ -195,7 +227,7 @@ open class ScrollingTabView: UIView {
         
         if centerSelectTabs {
             let inset = collectionView.frame.width / 2.0 - scrollingLayout.itemSize.width / 2.0
-            collectionView.contentInset = UIEdgeInsetsMake(0, inset, 0, inset)
+            collectionView.contentInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
         } else {
             collectionView.contentInset = UIEdgeInsets.zero
         }
@@ -246,7 +278,8 @@ open class ScrollingTabView: UIView {
         let percentSecond = shareSecond / percentageInterval
         
         let selectIndexPath = percentFirst >= 0.5 ? firstPath : secondPath
-        collectionView.selectItem(at: selectIndexPath, animated: false, scrollPosition: UICollectionViewScrollPosition())
+        collectionView.selectItem(at: selectIndexPath, animated: false,
+                                  scrollPosition: UICollectionView.ScrollPosition())
 
         let attrs1 = collectionView.collectionViewLayout.layoutAttributesForItem(at: firstPath)
         let attrs2 = collectionView.collectionViewLayout.layoutAttributesForItem(at: secondPath)
